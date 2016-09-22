@@ -29,7 +29,7 @@ $(function(){
 		clickbg(x,y,count,ballcount);
 	},200);
 })
-var color=["red","yellow","green","blue","orange","purple","pink","white","gray","darkgree","lightblue"];
+var color=["red","yellow","green","blue","orange","purple","pink","white","lightred","darkgree","lightblue"];
 var r=100;
 var count=0;
 function clickbg(x,y,count,ballcount){
