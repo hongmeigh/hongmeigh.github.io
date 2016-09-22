@@ -2,23 +2,32 @@ $(function(){
 	var ballcount=3;
 	$(document).mousedown(function(e){
 		window.pand=true;
-		var x=e.pageX;
-		var y=e.pageY;		
-		count=count+1;
-		clickbg(x,y,count,ballcount);
+
 	})
 	$(document).mousemove(function(e){
 		if(window.pand){
-			window.pand=true;
+			console.log("yes")
 			var x=e.pageX;
 			var y=e.pageY;		
 			count=count+1;
 			clickbg(x,y,count,ballcount);
 		}
 	})
-	$(document).mouseup(function(){
+	$(document).mouseup(function(e){
 		window.pand=false;
+		var x=e.pageX;
+		var y=e.pageY;		
+		count=count+1;
+		clickbg(x,y,count,ballcount);
 	})
+	//自动
+	var x=1900; y=1000;
+	setInterval(function(){
+		x=1900*Math.random();
+		y=1000*Math.random();
+		count=count+1;
+		clickbg(x,y,count,ballcount);
+	},200);
 })
 var color=["red","yellow","green","blue","orange","purple","pink","white","gray","darkgree","lightblue"];
 var r=100;
@@ -46,7 +55,7 @@ function clickbg(x,y,count,ballcount){
 				for(var n=0; n<ballcount1; n++){
 					htmlobj[n][0].style[TRANSFORM_NAME]="translate("+tasx[n]+"px,"+tasy[n]+"px)";
 				}
-		},5)
+		},15)
 	}
 	setTimeout(function(){divcount.remove();},550)
 
