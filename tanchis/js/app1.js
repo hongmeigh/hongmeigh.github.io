@@ -105,7 +105,7 @@ $(function(){
 			if((event.keyCode!=direction)&&(Math.abs(event.keyCode-direction)!=2)){
 				direction=event.keyCode;
 			}
-			dur=150;
+			dur=100;
 			if(count==0){
 				clearInterval(h);
 				h=setInterval(hua,dur);
