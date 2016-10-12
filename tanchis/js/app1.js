@@ -11,6 +11,7 @@ $(function(){
 	var blue=[];
 	var direction=39;
 	var equal=false;
+	var endgame=false;
 	//生成一个随机的小格
 	function num(){
 		blue[0]=Math.floor(40*Math.random());
@@ -32,6 +33,7 @@ $(function(){
 				if(arr[m][0]==arr[e][0]){
 					if(arr[m][1]==arr[e][1]){
 						clearInterval(h);
+						endgame=true;
 						alert("游戏结束");
 						return true;
 					}
@@ -40,6 +42,7 @@ $(function(){
 		}
 		if((arr[0][0]==39&&direction==39)||(arr[0][0]==0&&direction==37)||(arr[0][1]==39&&direction==40)||(arr[0][1]==0&&direction==38)){
 				clearInterval(h);
+				endgame=true;
 				alert("游戏结束");
 				return true;
 			}
@@ -98,7 +101,7 @@ $(function(){
 	var h=setInterval(hua,dur);
 	//当按住键的时候加速
 	document.onkeydown=function(e){
-		if(event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40){
+		if((event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40)&&!endgame){
 			if((event.keyCode!=direction)&&(Math.abs(event.keyCode-direction)!=2)){
 				direction=event.keyCode;
 			}
@@ -112,7 +115,7 @@ $(function(){
 	}
 	//37左,39右,38上,40下
 	document.onkeyup=function(event){
-		if(event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40){
+		if((event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40)&&!endgame){
 			clearInterval(h);
 			dur=300;
 			h=setInterval(hua,dur);
