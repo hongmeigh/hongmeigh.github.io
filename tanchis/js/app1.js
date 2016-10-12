@@ -120,6 +120,7 @@ $(function(){
 			dur=300;
 			h=setInterval(hua,dur);
 			count=0;
+			hua();
 		}
 	}
 })
