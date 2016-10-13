@@ -1,6 +1,7 @@
 $(function(){
 	var canvas=document.getElementById("mycanvas");
 	var c=canvas.getContext("2d");
+	//方格初始值
 	var arr=[
 		[2,0],
 		[1,0],
@@ -9,6 +10,7 @@ $(function(){
 	var dur=300;
 	var count=0;
 	var blue=[];
+	//初始方向
 	var direction=39;
 	var equal=false;
 	var endgame=false;
@@ -17,11 +19,9 @@ $(function(){
 		blue[0]=Math.floor(40*Math.random());
 		blue[1]=Math.floor(40*Math.random());
 		for(var num=0; num<arr.length; num++){
-			if(blue[0]==arr[num][0]){
-				if(blue[1]==arr[num][1]){
-					blue[1]=Math.floor(40*Math.random());
-					num();
-				}
+			if(blue[0]==arr[num][0]&&blue[1]==arr[num][1]){
+				blue[1]=Math.floor(40*Math.random());
+				num();
 			}
 		}
 	}
@@ -102,20 +102,20 @@ $(function(){
 	//当按住键的时候加速
 	document.onkeydown=function(e){
 		if((event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40)&&!endgame){
-			if((event.keyCode!=direction)&&(Math.abs(event.keyCode-direction)!=2)){
+			if(Math.abs(event.keyCode-direction)!=2){
 				direction=event.keyCode;
-			}
-			dur=100;
-			if(count==0){
-				clearInterval(h);
-				h=setInterval(hua,dur);
-			}
-			count++;
+				dur=100;
+				if(count==0){
+					clearInterval(h);
+					h=setInterval(hua,dur);
+				}
+				count++;
+			}			
 		}
 	}
 	//37左,39右,38上,40下
 	document.onkeyup=function(event){
-		if((event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40)&&!endgame){
+		if((event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40)&&!endgame&&(Math.abs(event.keyCode-direction)!=2)){
 			clearInterval(h);
 			dur=300;
 			h=setInterval(hua,dur);
