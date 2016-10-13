@@ -15,17 +15,17 @@ $(function(){
 	var equal=false;
 	var endgame=false;
 	//生成一个随机的小格
-	function num(){
+	function numone(){
 		blue[0]=Math.floor(40*Math.random());
 		blue[1]=Math.floor(40*Math.random());
 		for(var num=0; num<arr.length; num++){
 			if(blue[0]==arr[num][0]&&blue[1]==arr[num][1]){
 				blue[1]=Math.floor(40*Math.random());
-				num();
+				numone();
 			}
 		}
 	}
-	num();
+	numone();
 	//判断结束条件
 	function end(){
 		for(var m=0; m<arr.length; m++){
@@ -81,7 +81,7 @@ $(function(){
 					arr.unshift([arr[0][0]+1,arr[0][1]])
 				}
 				$(".count span").html(parseInt($(".count span").html())+1);
-				num();
+				numone();
 			}
 		}
 		arr.pop();
