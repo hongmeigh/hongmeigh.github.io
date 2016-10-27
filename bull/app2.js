@@ -15,8 +15,8 @@ window.onload=function(){
 		//console.log(vet)
 		totalcount=totalcount+10;
 		ctx.clearRect(0,0,w,-h);
-		for(var j=0; j<index.length; j++){
-			for(var i=0; i<index[j].length; i++){
+		for(var i=0; i<index.length; i++){
+			for(var j=0; j<index[i].length; j++){
 				if(index[i][j]!='*'){
 					if(-h+totalcount>0) totalcount=h;
 					var x=j*k,y=-k*(i+1)-h+totalcount;										
@@ -189,9 +189,9 @@ function twopoint(point,draw,ctx,w,h,k,vet,donghua,hor,donghua1){
 function drawheng(ctx,k,hor){
 		hor.splice(0,hor.length); hor.end=false;
 		var sta=[],count=0,add=false,obj={},onesta=[]; 
-		for(var j=0; j<index.length; j++){
+		for(var j=0; j<index[0].length; j++){
 			sta[j]=false;obj[j]=[];
-			for(var i=0; i<index[j].length; i++){
+			for(var i=0; i<index.length; i++){
 				if(index[i][j]!="*"){
 					sta[j]=true;
 					obj[j].push([i,j])
@@ -223,9 +223,9 @@ function drawheng(ctx,k,hor){
 	function drawshu(ctx,k,vet){
 		vet.splice(0,vet.length);
 		vet.end=false;
-		for(var j=0; j<index.length; j++){
+		for(var j=0; j<index[0].length; j++){
 			var count=0,num=0;
-			for(var i=0; i<index[j].length; i++){
+			for(var i=0; i<index.length; i++){
 				if(index[i][j]=='*'){
 					count++;
 				}
