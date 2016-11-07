@@ -6,8 +6,8 @@ window.onload=function(){
 	var h=$("body").height(),w=$("body").width();
 	canvas.height=h;
 	canvas.width=w;
-	var k=w/10;
-	var point=[],hor=[],vet=[];
+	var k=w/8;
+	var point=[],hor=[],vet=[],wordpoint=[];
 	ctx.translate(0,h);
 	var timer,timer1,totalcount=0;
 	var bgimg=ctx.createPattern(img,"repeat");
@@ -19,7 +19,8 @@ window.onload=function(){
 			for(var j=0; j<index[i].length; j++){
 				if(index[i][j]!='*'){
 					if(-h+totalcount>0) totalcount=h;
-					var x=j*k,y=-k*(i+1)-h+totalcount;										
+					var x=j*k,y=-k*(i+1)-h+totalcount;
+					ctx.fillStyle=bgimg;										
 					rect(ctx,x,y,k,index[i][j],bgimg);
 				}
 			}
@@ -63,41 +64,57 @@ window.onload=function(){
 							}
 						}
 					}
+					ctx.fillStyle=bgimg;
 					rect(ctx,x,y,k,index[i][j],bgimg)
 				}
 			}
 		}
 	}
-	function donghua(){		
+	function drawbg(){
+		ctx.clearRect(0,0,w,-h);
+		for(var i=0; i<index.length; i++){
+			for(var j=0; j<index[i].length; j++){
+				if(index[i][j]!='*'){
+					var x=j*k,y=-k*(i+1);
+					ctx.fillStyle=bgimg;
+					for(var w=0; w<wordpoint.length; w++){
+						if(wordpoint[w][1]==j&&wordpoint[w][0]==i){
+							ctx.fillStyle="#000";
+						}
+					}
+					rect(ctx,x,y,k,index[i][j],bgimg)
+				}
+			}
+		}
+	}
+	function donghua(){	
 			timer=setInterval(function(){
 				draw();
-				if(vet.end){
+				if(vet.end&&hor.end){
+					//alert("1111")
 					for(var b=0; b<vet.length; b++){
 						index[vet[b][0]-vet[b].count][vet[b][1]]=index[vet[b][0]][vet[b][1]];
 						index[vet[b][0]][vet[b][1]]="*";
+						for(var d=0; d<hor.length; d++){
+							if(vet[b][0]==hor[d][0]&&vet[b][1]==hor[d][1]){
+								hor[d][0]=vet[b][0]-vet[b].count;
+								hor[d][1]=vet[b][1];
+							}
+						}
 					}
+					for(var d=0; d<hor.length; d++){
+							index[hor[d][0]][hor[d][1]-hor[d].count]=index[hor[d][0]][hor[d][1]];
+							index[hor[d][0]][hor[d][1]]="*";
+						}
 					clearInterval(timer);
 					vet.splice(0,vet.length);
 					vet.end=false;
-					draw();
-				}
-			},10);
-	}
-	function donghua1(){		
-			timer1=setInterval(function(){
-				draw();
-				if(hor.end){
-					for(var d=0; d<hor.length; d++){
-						index[hor[d][0]][hor[d][1]-hor[d].count]=index[hor[d][0]][hor[d][1]];
-						index[hor[d][0]][hor[d][1]]="*";
-					}
-					clearInterval(timer1);
 					hor.splice(0,hor.length);
 					hor.end=false;
 					draw();
 				}
 			},10);
-	}	
+	}
 	//draw();
 	canvas.onclick=function(event){
 		var left=event.offsetX;
@@ -107,9 +124,9 @@ window.onload=function(){
 		if(point.length==3){
 			point.shift();
 		}
-		console.log(point.length);
+		//console.log(point.length);
 		if(point.length==2){
-			twopoint(point,draw,ctx,w,h,k,vet,donghua,hor,donghua1);
+			twopoint(point,draw,ctx,w,h,k,vet,donghua,hor,wordpoint,drawbg);
 		}
 
 	}
@@ -117,7 +134,6 @@ window.onload=function(){
 //画方块
 function rect(ctx,x,y,k,txt,bgimg){
 	ctx.beginPath();
-	ctx.fillStyle=bgimg;
 	ctx.strokeStyle="#33f606";
 	ctx.lineWidth=2;
 	ctx.rect(x,y,k,k);
@@ -131,9 +147,10 @@ function rect(ctx,x,y,k,txt,bgimg){
 	ctx.fillText(txt,x+k/2,y+k/2);	
 }
 //对传入的两点进行判断
-function twopoint(point,draw,ctx,w,h,k,vet,donghua,hor,donghua1){
+function twopoint(point,draw,ctx,w,h,k,vet,donghua,hor,wordpoint,drawbg){
 	if((index[point[0][0],point[0][1]]!="*"&&index[point[1][0],point[1][1]]!="*")&&(point[0][0]==point[1][0]||point[0][1]==point[1][1])&&!(point[0][0]==point[1][0]&&point[0][1]==point[1][1])){
-		var str="",wordpoint=[];
+		var str="";
+		wordpoint.splice(0,wordpoint.length)
 		if(point[0][0]==point[1][0]){
 			if(point[1][1]-point[0][1]>0){
 				for(var m1=point[0][1]; m1<point[1][1]+1; m1++){
@@ -165,25 +182,36 @@ function twopoint(point,draw,ctx,w,h,k,vet,donghua,hor,donghua1){
 		console.log(str)
 		for(var wo=0; wo<word.length; wo++){
 			if(str==word[wo]){
-				for(var p=0; p<wordpoint.length; p++){
+				drawbg();
+				setTimeout(function(){
+					for(var p=0; p<wordpoint.length; p++){
 					index[wordpoint[p][0]][wordpoint[p][1]]="*";
-				}
+					}
+					wordpoint.splice(0,wordpoint.length)
+					drawshu(ctx,k,vet);
+					drawheng(ctx,k,hor);
+					if(vet.length>0&&hor.length>0){
+						donghua();
+						return;
+					}
+					if(vet.length>0){
+						hor.end=true;
+						donghua();
+					}else{
+						draw();
+					}
+					if(hor.length>0){
+						vet.end=true;
+						donghua();
+					}else{
+						draw();
+					}
+				},500)
+								
 			}
-		}
-		drawshu(ctx,k,vet);
-		drawheng(ctx,k,hor);
-		//draw()
-		if(vet.length>0){
-			donghua();
-		}else{
-			draw();
-		}
-		if(hor.length>0){
-			//alert("ok")
-			donghua1();
-		}
+		}		
+		
 	}
-	//point.splice(0,point.length)
 }
 //获取横向动画数组状态
 function drawheng(ctx,k,hor){
@@ -198,16 +226,13 @@ function drawheng(ctx,k,hor){
 				}				
 			}
 		}
-		//console.log(obj[3])
 		for(var z=0; z<sta.length; z++){
 			if(sta[z]) add=true;
 			if(add&&!sta[z]){
 				count++;
 			}
 			if(count>0&&sta[z]){
-				//console.log("oooooooooooo")
 				obj[z].forEach(function(elm,index){
-					//console.log(elm[0])
 					onesta=[elm[0],elm[1]];
 					onesta.x=elm[1]*k;
 					onesta.y=-k*(elm[0]+1);
